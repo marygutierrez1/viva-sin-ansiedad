@@ -1,0 +1,23 @@
+# Entorno virtual
+venv/
+.venv/
+
+# Variables de entorno
+.env
+
+# Credenciales de Google Cloud
+*.json
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+
+# VS Code
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
