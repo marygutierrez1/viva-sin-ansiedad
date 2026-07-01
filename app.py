@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
+import os
 from flask import Flask, request
 import requests
 
@@ -46,9 +47,9 @@ def webhook():
         # 🧠 Dialogflow
         respuesta = detectar_intencion(text, session_id=str(chat_id))
 
-        print("🤖 RESPUESTA DIAGFLOW:", respuesta)
+        print("🤖 RESPUESTA DIALOGFLOW:", respuesta)
 
-        # 📤 Enviar a Telegram
+        # 📤 Enviar respuesta a Telegram
         telegram_response = requests.post(
             f"{TELEGRAM_API}/sendMessage",
             json={
@@ -67,6 +68,7 @@ def webhook():
     return "ok", 200
 
 
-# 🟢 Ejecutar local
+# 🟢 Ejecutar la aplicación
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
