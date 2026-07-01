@@ -1,7 +1,13 @@
 import os
+import json
 from google.cloud import dialogflow_v2 as dialogflow
+from google.oauth2 import service_account
 
 PROJECT_ID = os.getenv("DIALOGFLOW_PROJECT_ID")
+
+# 🟢 Cargar credenciales desde Render (NO archivo JSON)
+credentials_info = json.loads(os.environ["GOOGLE_CREDENTIALS_JSON"])
+credentials = service_account.Credentials.from_service_account_info(credentials_info)
 
 
 def detectar_intencion(texto, session_id):
@@ -11,7 +17,8 @@ def detectar_intencion(texto, session_id):
     """
 
     try:
-        session_client = dialogflow.SessionsClient()
+        # 🟢 Cliente con credenciales de Render
+        session_client = dialogflow.SessionsClient(credentials=credentials)
 
         session = session_client.session_path(PROJECT_ID, session_id)
 
