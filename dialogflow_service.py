@@ -4,9 +4,11 @@ from google.cloud import dialogflow_v2 as dialogflow
 from google.oauth2 import service_account
 
 PROJECT_ID = os.getenv("DIALOGFLOW_PROJECT_ID")
+print("PROJECT_ID =", PROJECT_ID)
 
 # 🟢 Cargar credenciales desde Render (NO archivo JSON)
 credentials_info = json.loads(os.environ["GOOGLE_CREDENTIALS_JSON"])
+print("GOOGLE_CREDENTIALS_JSON cargado correctamente")
 credentials = service_account.Credentials.from_service_account_info(credentials_info)
 
 
