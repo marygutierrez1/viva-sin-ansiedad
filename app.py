@@ -7,6 +7,7 @@ import requests
 
 from config import TELEGRAM_TOKEN
 from dialogflow_service import detectar_intencion
+from sheets_service import guardar_usuario, actualizar_estado
 
 app = Flask(__name__)
 
@@ -36,9 +37,17 @@ def webhook():
 
         chat_id = data["message"]["chat"]["id"]
         text = data["message"].get("text", "")
+        nombre = data["message"]["chat"].get("first_name", "Sin nombre")
+        username = data["message"]["chat"].get("username", "Sin username")
 
         print("👤 CHAT ID:", chat_id)
         print("💬 TEXTO:", text)
+        guardar_usuario(
+            chat_id,
+            nombre,
+            username,
+            "Nuevo"
+)
 
         if not text:
             print("⚠️ Mensaje vacío")
@@ -47,14 +56,21 @@ def webhook():
         # 🧠 Dialogflow
         respuesta = detectar_intencion(text, session_id=str(chat_id))
 
-        print("🤖 RESPUESTA DIALOGFLOW:", respuesta)
+        mensaje = respuesta["mensaje"]
+        intent = respuesta["intent"]
+        print("🤖 RESPUESTA DIALOGFLOW:", mensaje)
+        print("🎯 INTENT DETECTADO:", intent)
 
+        if "Psicologo_Online" in intent and "yes" in intent:
+           print("🚀 ENTRÓ AL FLUJO DE PSICÓLOGO")
+           actualizar_estado(chat_id, "Pendiente Psicólogo")
+       
         # 📤 Enviar respuesta a Telegram
         telegram_response = requests.post(
             f"{TELEGRAM_API}/sendMessage",
             json={
                 "chat_id": chat_id,
-                "text": respuesta
+                "text": mensaje
             }
         )
 
