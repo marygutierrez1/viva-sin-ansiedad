@@ -48,4 +48,7 @@ def detectar_intencion(texto, session_id):
 
     except Exception as e:
         print("❌ Error Dialogflow:", e)
-        return "💙 Lo siento, ocurrió un error interno. Intenta nuevamente."
+        return {
+          "mensaje": "💙 Lo siento, ocurrió un error interno. Intenta nuevamente.",
+         "intent": ""
+}

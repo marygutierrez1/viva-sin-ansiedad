@@ -8,10 +8,13 @@ import requests
 from config import TELEGRAM_TOKEN
 from dialogflow_service import detectar_intencion
 from sheets_service import guardar_usuario, actualizar_estado
+from telegram_service import send_message
 
 app = Flask(__name__)
 
 TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
+PSICOLOGO_CHAT_ID = os.getenv("PSICOLOGO_CHAT_ID")
+ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
 
 
 # 🟢 Ruta de prueba
@@ -62,8 +65,35 @@ def webhook():
         print("🎯 INTENT DETECTADO:", intent)
 
         if "Psicologo_Online" in intent and "yes" in intent:
-           print("🚀 ENTRÓ AL FLUJO DE PSICÓLOGO")
-           actualizar_estado(chat_id, "Pendiente Psicólogo")
+         print("🚀 ENTRÓ AL FLUJO DE PSICÓLOGO")
+  
+         actualizar_estado(chat_id, "Pendiente Psicólogo")
+        
+         mensaje_psicologo = f"""
+        🚨 Nuevo usuario derivado
+
+        👤 Nombre: {nombre}
+        🆔 Chat ID: {chat_id}
+        📱 Usuario: @{username}
+
+        El usuario ha solicitado atención psicológica.
+       """
+
+         mensaje_admin = f"""
+        🔔 Nueva solicitud de atención psicológica
+
+        👤 Usuario: {nombre}
+        🆔 Telegram ID: {chat_id}
+        📱 Username: @{username}
+
+        Estado: Pendiente Psicólogo
+        """
+         
+         send_message(PSICOLOGO_CHAT_ID, mensaje_psicologo)
+         send_message(ADMIN_CHAT_ID, mensaje_admin)
+
+         print("📨 Notificación enviada al psicólogo:", PSICOLOGO_CHAT_ID)
+         print("📨 Notificación enviada al administrador:", ADMIN_CHAT_ID)
        
         # 📤 Enviar respuesta a Telegram
         telegram_response = requests.post(
