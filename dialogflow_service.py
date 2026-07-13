@@ -7,13 +7,13 @@ PROJECT_ID = os.getenv("DIALOGFLOW_PROJECT_ID")
 print("PROJECT_ID =", PROJECT_ID)
 
 # 🟢 Cargar credenciales desde archivo JSON local
-GOOGLE_CREDENTIAL_JSON = os.getenv("GOOGLE_CREDENTIAL_JSON")
+GOOGLE_CREDENTIALS_JSON = os.getenv("GOOGLE_CREDENTIALS_JSON")
 
-if GOOGLE_CREDENTIAL_JSON:
+if  GOOGLE_CREDENTIALS_JSON:
     print("✅ Usando credenciales desde Render")
 
     credentials = service_account.Credentials.from_service_account_info(
-        json.loads(GOOGLE_CREDENTIAL_JSON)
+        json.loads(GOOGLE_CREDENTIALS_JSON)
     )
 
 else:

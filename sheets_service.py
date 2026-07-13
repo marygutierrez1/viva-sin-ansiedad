@@ -10,13 +10,13 @@ SCOPES = [
 ]
 
 # Ruta del archivo JSON de la cuenta de servicio
-GOOGLE_CREDENTIAL_JSON = os.getenv("GOOGLE_CREDENTIAL_JSON")
+GOOGLE_CREDENTIALS_JSON = os.getenv("GOOGLE_CREDENTIALS_JSON")
 
-if GOOGLE_CREDENTIAL_JSON:
+if GOOGLE_CREDENTIALS_JSON:
     print("✅ Google Sheets: usando credenciales desde Render")
 
     credentials = Credentials.from_service_account_info(
-        json.loads(GOOGLE_CREDENTIAL_JSON),
+        json.loads(GOOGLE_CREDENTIALS_JSON),
         scopes=SCOPES
     )
 
