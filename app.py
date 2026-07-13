@@ -105,6 +105,7 @@ def webhook():
         )
 
         print("📤 TELEGRAM STATUS:", telegram_response.status_code)
+        print("📤 RESPUESTA TELEGRAM:", telegram_response.text)
 
     except Exception as e:
         print("❌ ERROR EN WEBHOOK:", e)

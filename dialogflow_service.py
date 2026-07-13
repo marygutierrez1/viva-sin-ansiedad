@@ -1,3 +1,4 @@
+import json
 import os
 from google.cloud import dialogflow_v2 as dialogflow
 from google.oauth2 import service_account
@@ -6,13 +7,26 @@ PROJECT_ID = os.getenv("DIALOGFLOW_PROJECT_ID")
 print("PROJECT_ID =", PROJECT_ID)
 
 # 🟢 Cargar credenciales desde archivo JSON local
-GOOGLE_CREDENTIALS_FILE = os.getenv(
-    "GOOGLE_APPLICATION_CREDENTIALS"
-)
+GOOGLE_CREDENTIAL_JSON = os.getenv("GOOGLE_CREDENTIAL_JSON")
 
-credentials = service_account.Credentials.from_service_account_file(
-    GOOGLE_CREDENTIALS_FILE
-)
+if GOOGLE_CREDENTIAL_JSON:
+    print("✅ Usando credenciales desde Render")
+
+    credentials = service_account.Credentials.from_service_account_info(
+        json.loads(GOOGLE_CREDENTIAL_JSON)
+    )
+
+else:
+    print("✅ Usando credenciales desde archivo local")
+
+    GOOGLE_CREDENTIALS_FILE = os.getenv(
+        "GOOGLE_APPLICATION_CREDENTIALS"
+    )
+
+    credentials = service_account.Credentials.from_service_account_file(
+        GOOGLE_CREDENTIALS_FILE
+    )
+    
 print("✅ Credenciales de Google cargadas correctamente")
 
 def detectar_intencion(texto, session_id):

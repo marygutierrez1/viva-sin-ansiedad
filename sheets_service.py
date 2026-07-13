@@ -1,3 +1,5 @@
+import os
+import json
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -8,14 +10,27 @@ SCOPES = [
 ]
 
 # Ruta del archivo JSON de la cuenta de servicio
-SERVICE_ACCOUNT_FILE = "vidasinansiedadbot-n9fd-56ae7cd5437d.json"  # Cambia el nombre si tu archivo tiene otro
+GOOGLE_CREDENTIAL_JSON = os.getenv("GOOGLE_CREDENTIAL_JSON")
 
-# Autenticación
-credentials = Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE,
-    scopes=SCOPES
-)
+if GOOGLE_CREDENTIAL_JSON:
+    print("✅ Google Sheets: usando credenciales desde Render")
 
+    credentials = Credentials.from_service_account_info(
+        json.loads(GOOGLE_CREDENTIAL_JSON),
+        scopes=SCOPES
+    )
+
+else:
+    print("✅ Google Sheets: usando credenciales desde archivo local")
+
+    SERVICE_ACCOUNT_FILE = os.getenv(
+        "GOOGLE_APPLICATION_CREDENTIALS"
+    )
+
+    credentials = Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE,
+        scopes=SCOPES
+    )
 client = gspread.authorize(credentials)
 
 # Abrir la hoja por nombre
