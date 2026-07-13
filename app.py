@@ -61,6 +61,13 @@ def webhook():
 
         mensaje = respuesta["mensaje"]
         intent = respuesta["intent"]
+
+        print("========================")
+        print("RESPUESTA COMPLETA:")
+        print(respuesta)
+        print("INTENT:", repr(intent))
+        print("========================")
+        
         print("🤖 RESPUESTA DIALOGFLOW:", mensaje)
         print("🎯 INTENT DETECTADO:", intent)
 
